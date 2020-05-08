@@ -100,7 +100,9 @@ function vis1(data, div) {
 
     var xAxis = d3.axisBottom(x);
     
-    xAxisGroup.call(xAxis)
+    xAxisGroup
+      .transition().duration(1000)
+      .call(xAxis)
       .call(g => g.selectAll(".domain").remove());
 
     var y = d3.scaleBand()
@@ -110,7 +112,9 @@ function vis1(data, div) {
 
     var yAxis = d3.axisLeft(y);
 
-    yAxisGroup.call(yAxis)
+    yAxisGroup
+      .transition().duration(300)
+      .call(yAxis)
       .call(g => g.selectAll(".domain").remove());
 
     //draw revenue bars

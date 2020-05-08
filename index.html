@@ -1,0 +1,46 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+
+        
+        <!-- link our CSS file -->
+        <link rel="stylesheet" href="style.css">
+
+        <!-- defer makes it so that these scripts load
+            in the background and then execute in order
+            after the DOM is ready -->
+
+        <!-- D3 library goes first --> 
+        <script src="d3/d3.js" defer></script>
+        <script src="d3/d3-array.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js" defer></script> 
+        
+        <!-- Then our visualization code --> 
+        <script src="visualizations/vis1.js" defer></script>
+
+        
+        <!-- Then our code that calls the visualizations --> 
+        <script src="main.js" defer></script>
+
+    </head>
+
+    <body>
+        <div id="container">
+         
+           
+                <label for="nValue" 
+                       style="display: inline-block; width: 240px; text-align: right">
+                       num = <span id="nValue-value"></span>
+                </label>
+                <input type="number" min="1" max="20" step="1" value="5" id="nValue">
+                <form id="dimensions">
+                    <input type='radio' id="budget" name="mode" checked>Sort by Budget</input>
+                    <input type='radio' id="revenue" name="mode">Sort by Revenue</input>
+                    <input type='radio' id="ratio" name="mode">Sort by Ratio</input>
+                </form>
+            
+            <div id="vis1"></div>
+            
+        </div>
+    </body>
+</html>

@@ -83,11 +83,13 @@ function vis1(data, div) {
     }
     else if (sortMethod == "revenue"){
       filteredData = data.slice()
+        .filter(d => !filteredMovies.includes(d.title))
         .sort((a, b) => d3.descending(a.revenue, b.revenue))
         .slice(0, nValue);
     }
     else{
       filteredData = data.slice()
+      .filter(d => !filteredMovies.includes(d.title))
       .sort((a, b) => d3.descending(a.ratio, b.ratio))
       .slice(0, nValue);
     }
@@ -135,34 +137,39 @@ function vis1(data, div) {
       .on("mouseover", function(d) {		
         });					
   }
+
+  function addBarClickPropertiesAndUpdate(){
+    update(nValue.value)
+    g.selectAll(".budget-bars").on("click", function(d) {
+      filteredMovies.push(d.title);
+      update(nValue.value)
+    });
+    g.selectAll(".revenue-bars").on("click", function(d) {
+      filteredMovies.push(d.title);
+      update(nValue.value)
+    });
+  }
+
   function updateSortFilter(){
     form = document.getElementById("dimensions")
     for (var i=0; i<form.length; i++){
       if (form[i].checked){
         sortMethod = form[i].id;
-        update(nValue.value);
+        addBarClickPropertiesAndUpdate()
       }
     }
   }
+
+  
   //update when text field number changes
   d3.select("#nValue").on("input", function() {
-    update(nValue.value);
+    addBarClickPropertiesAndUpdate()
+    
   });
   
   d3.select("#dimensions").on("change", updateSortFilter);
   
   // load initial data
-  update(nValue.value);
-  
-  
-  g.selectAll(".budget-bars").on("click", function(d) {
-    filteredMovies.push(d.title);
-    update(nValue.value);
-  });
-
-  g.selectAll(".revenue-bars").on("click", function(d) {
-    filteredMovies.push(d.title);
-    update(nValue.value);
-  });
+  addBarClickPropertiesAndUpdate()
   
 }

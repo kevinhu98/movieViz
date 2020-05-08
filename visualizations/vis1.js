@@ -12,6 +12,7 @@ function vis1(data, div) {
   const visWidth = 1600 - margin.left - margin.right;
   const visHeight = 800 - margin.top - margin.bottom;
   var sortMethod = "budget";
+  var filteredMovies = [];
   //append svg
   const svg = div.append('svg')
     .attr('width', visWidth + margin.left + margin.right)
@@ -73,10 +74,10 @@ function vis1(data, div) {
 
   function update(nValue) {
     //filter data by type and user input
-    console.log(data);
-    console.log(sortMethod);
+    console.log(filteredMovies);
     if (sortMethod == "budget"){
       filteredData = data.slice()
+        .filter(d => !filteredMovies.includes(d.title))
         .sort((a, b) => d3.descending(a.budget, b.budget))
         .slice(0, nValue);
     }
@@ -90,7 +91,6 @@ function vis1(data, div) {
       .sort((a, b) => d3.descending(a.ratio, b.ratio))
       .slice(0, nValue);
     }
-    console.log(filteredData);
 
     var x = d3.scaleLinear()
       .domain([-d3.max(filteredData, d => d.budget), d3.max(filteredData, d => d.revenue)]).nice()
@@ -150,18 +150,19 @@ function vis1(data, div) {
   });
   
   d3.select("#dimensions").on("change", updateSortFilter);
+  
   // load initial data
   update(nValue.value);
   
-  /*
-  g.selectAll(".budget-bars").on("click", function() {
-    sortMethod = "budget";
+  
+  g.selectAll(".budget-bars").on("click", function(d) {
+    filteredMovies.push(d.title);
     update(nValue.value);
   });
 
-  g.selectAll(".revenue-bars").on("click", function() {
-    sortMethod = "revenue";
+  g.selectAll(".revenue-bars").on("click", function(d) {
+    filteredMovies.push(d.title);
     update(nValue.value);
   });
-  */
+  
 }

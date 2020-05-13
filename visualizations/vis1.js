@@ -1,6 +1,5 @@
 /*
 todo
-2. click to sort by budget, revenue
 3. check boxes to filter on type of movie
 4. on hover for more specific data
 5. consider scaling svg by nValue
@@ -22,9 +21,10 @@ function vis1(data, div) {
   const g = svg.append("g")
     .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-  var div = d3.select("vis1").append("div")	
+  var div = svg.append("g")	
     .attr("class", "tooltip")				
-    .style("opacity", 0);
+    .style("opacity", 1)
+    .attr("transform", "translate(1200,20)");
 
   //append title
   g.append("text")
@@ -68,26 +68,21 @@ function vis1(data, div) {
   legend = svg.select(".legendOrdinal")
     .call(legendOrdinal);
 
-  legend.on("click", function(d){
-    console.log(legendOrdinal);
-  });
-
   function update(nValue) {
     //filter data by type and user input
-    console.log(filteredMovies);
-    if (sortMethod == "budget"){
+    if (sortMethod === "budget"){
       filteredData = data.slice()
         .filter(d => !filteredMovies.includes(d.title))
         .sort((a, b) => d3.descending(a.budget, b.budget))
         .slice(0, nValue);
     }
-    else if (sortMethod == "revenue"){
+    else if (sortMethod === "revenue"){
       filteredData = data.slice()
         .filter(d => !filteredMovies.includes(d.title))
         .sort((a, b) => d3.descending(a.revenue, b.revenue))
         .slice(0, nValue);
     }
-    else{
+    else {
       filteredData = data.slice()
       .filter(d => !filteredMovies.includes(d.title))
       .sort((a, b) => d3.descending(a.ratio, b.ratio))
@@ -122,8 +117,19 @@ function vis1(data, div) {
       .attr("y", d => y(d.title))
       .attr("width", d => (x(d.revenue) - x(0))) // change width so it assumes we start at 0
       .attr("height", d => y.bandwidth())
-      .attr("fill", "steelblue");
-  
+      .attr("fill", "steelblue")
+      .on("mouseover", function(d) {	
+        div.transition()		
+                .duration(200)		
+                .style("opacity", .9);		
+        div.html("<b>Title: </b>" + d.title + "<br/>" + 
+        "<b>Total Revenue: </b>" + d.revenue + "<br/>" +
+        "<b>Total Budget: </b>" + d.budget + "<br/>" +
+        "<b>Average User Rating: </b>" + d.vote_average + "/10<br/>" +
+        "<b>Synopsis: </b>" + d.overview + "<br/>"
+        )
+        });		
+
     // draw budget bars
     g.selectAll(".budget-bars")
       .data(filteredData)
@@ -134,7 +140,16 @@ function vis1(data, div) {
       .attr("width", d => (x(0) - x(-d.budget))) // change width so rect ends at 0 
       .attr("height", d => y.bandwidth())
       .attr("fill", "red")
-      .on("mouseover", function(d) {		
+      .on("mouseover", function(d) {	
+        div.transition()		
+                .duration(200)		
+                .style("opacity", .9);		
+        div.html("<b>Title: </b>" + d.title + "<br/>" + 
+        "<b>Total Revenue: </b>" + d.revenue + "<br/>" +
+        "<b>Total Budget: </b>" + d.budget + "<br/>" +
+        "<b>Average User Rating: </b>" + d.vote_average + "/10<br/>" +
+        "<b>Synopsis: </b>" + d.overview + "<br/>"
+        )
         });					
   }
 
@@ -164,12 +179,9 @@ function vis1(data, div) {
   //update when text field number changes
   d3.select("#nValue").on("input", function() {
     addBarClickPropertiesAndUpdate()
-    
   });
   
-  d3.select("#dimensions").on("change", updateSortFilter);
-  
+  d3.select("#dimensions").on("change", updateSortFilter);  
   // load initial data
   addBarClickPropertiesAndUpdate()
-  
 }

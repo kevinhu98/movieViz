@@ -95,19 +95,31 @@ function vis1(data, div) {
 
     var xAxis = d3.axisBottom(x);
     
-    xAxisGroup.call(xAxis)
+    xAxisGroup
+      .transition().duration(1000)
+      .call(xAxis)
       .call(g => g.selectAll(".domain").remove());
 
     var y = d3.scaleBand()
       .domain(filteredData.map(d => d.title))
       .range([0, visHeight])
       .padding(0.2)
-
-    var yAxis = d3.axisLeft(y);
-
-    yAxisGroup.call(yAxis)
-      .call(g => g.selectAll(".domain").remove());
-
+    
+    
+    if (filteredData.map(d => d.title).length < 80){
+      var yAxis = d3.axisLeft(y);
+      yAxisGroup
+        .transition().duration(300)
+        .call(yAxis)
+        .call(g => g.selectAll(".domain").remove());
+    }
+    else{
+      var yAxis = d3.axisLeft(d3.scaleBand()); //empty y axis to call, should find better way
+      yAxisGroup
+        .transition().duration(300)
+        .call(yAxis)
+        .call(g => g.selectAll(".domain").remove());
+    }
     //draw revenue bars
     g.selectAll(".revenue-bars")
       .data(filteredData)

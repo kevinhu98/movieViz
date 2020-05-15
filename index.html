@@ -26,16 +26,26 @@
 
     <body>
         <button onclick="displayHelp()">Need Help?</button>
-        <div id="explanationDiv" style="display:none"; >
+        <div id="explanationDiv" style="display:none";>
         This is a visualization of the revenues and budgets of 4803 movies. <br><br>
-        Here's a quick guide on how to get started. <br>
+        Here is a quick guide on how to get started. <br>
         To change the number of movies you want to see at a time, edit the <b>"Number of Movies"</b> text field. <br>
-        To change the type of sorting, select one of the three buttons <b>(Budget, Revenue, and Profit Ratio)</b>
-        If you want to hide a movie, you can select the 
-        </div>
+        To change the type of sorting, select one of the three buttons. <b>(Budget, Revenue, and Profit/Budget or Profit Ratio)</b> <br>
+        If you want to hide a movie, you can click on the bar to remove it from the selection. <br>
+        As stated in the legend, the red bar represents the budget of the movie while the blue bar represents the profit of the movie. <br>
+        You can hover over a bar to learn more about a movie via the tooltip. <br>
+        <br>
 
-        
-         
+        <button onclick="displayObservations()">Personal Observations</button> <br>
+            <div id="personalObservationsDiv" style="display:none";>
+            <ul>
+                <li>Many of the most profitable movies did not rely on CGI as that would have ate into their budget.</li>
+                <li>Even very successful movies did not score very well in the user ratings. Not many movies score above 8/10.</li>
+                <li>Movies with the highest budget were fantasy ones, a majority of these being superhero movies.</li>
+                <li>Movies with the highest revenue usually had extremely low budgets.</li>
+            </ul>
+            </div>
+        </div>
            
                 <label for="nValue" 
                        style="display: inline-block; width: 240px; text-align: right">

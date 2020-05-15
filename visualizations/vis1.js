@@ -1,5 +1,16 @@
+//function for help button
 function displayHelp() {
   var x = document.getElementById("explanationDiv");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+
+//function for personal observation button
+function displayObservations() {
+  var x = document.getElementById("personalObservationsDiv");
   if (x.style.display === "none") {
     x.style.display = "block";
   } else {
@@ -11,8 +22,9 @@ function vis1(data, div) {
   const margin = {top: 40, right: 200, bottom: 40, left: 300};
   const visWidth = 1600 - margin.left - margin.right;
   const visHeight = 800 - margin.top - margin.bottom;
-  var sortMethod = "budget";
+  var sortMethod = "budget"; 
   var filteredMovies = [];
+
   //append svg
   const svg = div.append('svg')
     .attr('width', visWidth + margin.left + margin.right)
@@ -22,6 +34,7 @@ function vis1(data, div) {
   const g = svg.append("g")
     .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
+  //append tooltip to seperate div
   var tooltip = d3.select("body").append("div")	
     .attr("class", "tooltip")				
     .style("opacity", 0)
@@ -130,20 +143,20 @@ function vis1(data, div) {
       .attr("width", d => (x(d.revenue) - x(0))) // change width so it assumes we start at 0
       .attr("height", d => y.bandwidth())
       .attr("fill", "steelblue")
-      .on("mouseover", function(d) {	
+      .on("mouseenter", function(d) {	
         tooltip.transition()		
                 .duration(200)		
                 .style("opacity", .9);		
         tooltip.html("<b>Title: </b>" + d.title + "<br/>" + 
+        "<b>Release Date: </b>" + d.release_date + "<br/>" +
         "<b>Total Revenue: </b>" + d.revenueUSD + "<br/>" +
         "<b>Total Budget: </b>" + d.budgetUSD + "<br/>" +
         "<b>Average User Rating: </b>" + d.vote_average + "/10<br/>" +
         "<b>Synopsis: </b>" + d.overview + "<br/>")
         .style("left", (d3.event.pageX) + "px")		
         .style("top", (d3.event.pageY - 28) + "px");
-      
       })
-      .on("mouseout", function(d){
+      .on("mouseleave", function(d){
         tooltip.style("opacity", 0);
       });
         		
@@ -158,11 +171,12 @@ function vis1(data, div) {
       .attr("width", d => (x(0) - x(-d.budget))) // change width so rect ends at 0 
       .attr("height", d => y.bandwidth())
       .attr("fill", "red")
-      .on("mouseover", function(d) {	
+      .on("mouseenter", function(d) {	
         tooltip.transition()		
                 .duration(200)		
                 .style("opacity", .9);		
         tooltip.html("<b>Title: </b>" + d.title + "<br/>" + 
+        "<b>Release Date: </b>" + d.release_date + "<br/>" +
         "<b>Total Revenue: </b>" + d.revenueUSD + "<br/>" +
         "<b>Total Budget: </b>" + d.budgetUSD + "<br/>" +
         "<b>Average User Rating: </b>" + d.vote_average + "/10<br/>" +
@@ -170,7 +184,7 @@ function vis1(data, div) {
         .style("left", (d3.event.pageX) + "px")		
         .style("top", (d3.event.pageY - 28) + "px");
       })
-      .on("mouseout", function(d){
+      .on("mouseleave", function(d){
         tooltip.style("opacity", 0);
       });					
   }
@@ -202,7 +216,7 @@ function vis1(data, div) {
   d3.select("#nValue").on("input", function() {
     addBarClickPropertiesAndUpdate()
   });
-  
+  //update when sort radio button changes
   d3.select("#dimensions").on("change", updateSortFilter);  
   // load initial data
   addBarClickPropertiesAndUpdate()

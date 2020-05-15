@@ -47,7 +47,7 @@ function vis1(data, div) {
     .attr("dominant-baseline", "hanging")
     .attr("font-family", "sans-serif")
     .attr("font-size", "30px")
-    .text("Movie Visualization");
+    .text("Box Office Results of 4802 Movies");
 
   //create empty x-axis
   const xAxisGroup = g.append("g")

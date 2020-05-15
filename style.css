@@ -1,11 +1,12 @@
 body {
     font-family: sans-serif;
 }
-div.tooltip {	
+div.tooltip {
+    width: 20%;
+    display: inline-block;
     position: absolute;			
-    text-align: center;			
-    width: 400px;					
-    height: 280px;					
+    text-align: center;								
+    height: auto;					
     padding: 2px;				
     font: 16px sans-serif;		
     background: lightsteelblue;	

@@ -1,10 +1,11 @@
-/*
-todo
-3. check boxes to filter on type of movie
-4. on hover for more specific data
-5. consider scaling svg by nValue
-6. on click bar, filter out data point
-*/
+function displayHelp() {
+  var x = document.getElementById("explanationDiv");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
 
 function vis1(data, div) {
   const margin = {top: 40, right: 200, bottom: 40, left: 300};
@@ -21,10 +22,9 @@ function vis1(data, div) {
   const g = svg.append("g")
     .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-  var div = svg.append("g")	
+  var tooltip = d3.select("body").append("div")	
     .attr("class", "tooltip")				
-    .style("opacity", 1)
-    .attr("transform", "translate(1200,20)");
+    .style("opacity", 0)
 
   //append title
   g.append("text")
@@ -32,9 +32,9 @@ function vis1(data, div) {
     .attr("y", -margin.top + 5)
     .attr("text-anchor", "middle")
     .attr("dominant-baseline", "hanging")
-    .attr("font-family", "Comic Sans MS")
+    .attr("font-family", "sans-serif")
     .attr("font-size", "30px")
-    .text("movie stuff");
+    .text("Movie Visualization");
 
   //create empty x-axis
   const xAxisGroup = g.append("g")
@@ -131,16 +131,22 @@ function vis1(data, div) {
       .attr("height", d => y.bandwidth())
       .attr("fill", "steelblue")
       .on("mouseover", function(d) {	
-        div.transition()		
+        tooltip.transition()		
                 .duration(200)		
                 .style("opacity", .9);		
-        div.html("<b>Title: </b>" + d.title + "<br/>" + 
-        "<b>Total Revenue: </b>" + d.revenue + "<br/>" +
-        "<b>Total Budget: </b>" + d.budget + "<br/>" +
+        tooltip.html("<b>Title: </b>" + d.title + "<br/>" + 
+        "<b>Total Revenue: </b>" + d.revenueUSD + "<br/>" +
+        "<b>Total Budget: </b>" + d.budgetUSD + "<br/>" +
         "<b>Average User Rating: </b>" + d.vote_average + "/10<br/>" +
-        "<b>Synopsis: </b>" + d.overview + "<br/>"
-        )
-        });		
+        "<b>Synopsis: </b>" + d.overview + "<br/>")
+        .style("left", (d3.event.pageX) + "px")		
+        .style("top", (d3.event.pageY - 28) + "px");
+      
+      })
+      .on("mouseout", function(d){
+        tooltip.style("opacity", 0);
+      });
+        		
 
     // draw budget bars
     g.selectAll(".budget-bars")
@@ -153,16 +159,20 @@ function vis1(data, div) {
       .attr("height", d => y.bandwidth())
       .attr("fill", "red")
       .on("mouseover", function(d) {	
-        div.transition()		
+        tooltip.transition()		
                 .duration(200)		
                 .style("opacity", .9);		
-        div.html("<b>Title: </b>" + d.title + "<br/>" + 
-        "<b>Total Revenue: </b>" + d.revenue + "<br/>" +
-        "<b>Total Budget: </b>" + d.budget + "<br/>" +
+        tooltip.html("<b>Title: </b>" + d.title + "<br/>" + 
+        "<b>Total Revenue: </b>" + d.revenueUSD + "<br/>" +
+        "<b>Total Budget: </b>" + d.budgetUSD + "<br/>" +
         "<b>Average User Rating: </b>" + d.vote_average + "/10<br/>" +
-        "<b>Synopsis: </b>" + d.overview + "<br/>"
-        )
-        });					
+        "<b>Synopsis: </b>" + d.overview + "<br/>")
+        .style("left", (d3.event.pageX) + "px")		
+        .style("top", (d3.event.pageY - 28) + "px");
+      })
+      .on("mouseout", function(d){
+        tooltip.style("opacity", 0);
+      });					
   }
 
   function addBarClickPropertiesAndUpdate(){
